@@ -32,31 +32,24 @@ public class DCP18Max {
     }
     int currLargest = a[0];
     int foundAt = 0;
+    int nextLargestInd = 0;
+    int furthestLargestInd = 0;
+    boolean nextLargest = false;
     for(int n = 1; n < a.length; n++){
-      // for the first sub array, need to set up curr largest
-      if(n < k){
-        if(a[n] > currLargest){
-          currLargest = a[n];
-          foundAt = n;
-        }
-        if(n == k-1){
-          System.out.println(currLargest);
-        }
-      } else {
-        // now we have a constant currLargest
-        if(a[n] > currLargest){
-          currLargest = a[n];
-          foundAt = n;
-        } else if(n-k == foundAt){ // if the one we are losing from the subarray is the max
-          currLargest = a[n-k+1];
-          foundAt = n-k+1;
-          for(int i = n-k+2; i <= n; i++){ // find the new max (NEEDS WORK)
-            if(a[i] > currLargest){
-              currLargest = a[i];
-              foundAt = i;
-            }
+      if(a[n] > currLargest){
+        currLargest = a[n];
+        foundAt = n;
+      } else if(n-k == foundAt){ // if the one we are losing from the subarray is the max
+        currLargest = a[n-k+1];
+        foundAt = n-k+1;
+        for(int i = n-k+2; i <= n; i++){ // find the new max (NEEDS WORK)
+          if(a[i] > currLargest){
+            currLargest = a[i];
+            foundAt = i;
           }
         }
+      }
+      if(n >= k - 1) {
         System.out.println(currLargest);
       }
     }
