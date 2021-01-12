@@ -21,37 +21,38 @@ public class DCP18Max {
   public static void main(String[] args) {
     int[] a = {10, 5, 2, 7, 8, 7};
     int k = 3;
-    maxInKSubs(a, k);
+    int[] answer = maxInKSubs(a, k);
   }
 
-  public static void maxInKSubs(int[] a, int k){
+  public static int[] maxInKSubs(int[] a, int k){
     if(k == 1 || a.length <= 1){
       for (int value : a) {
         System.out.println(value);
       }
+      return a;
     }
+    int[] ans = new int[a.length - k + 1];
+    int ansInd = 0;
+
     int currLargest = a[0];
-    int foundAt = 0;
-    int nextLargestInd = 0;
-    int furthestLargestInd = 0;
-    boolean nextLargest = false;
+
+    NextLargest nextLargest = new NextLargest(k);
     for(int n = 1; n < a.length; n++){
       if(a[n] > currLargest){
         currLargest = a[n];
-        foundAt = n;
-      } else if(n-k == foundAt){ // if the one we are losing from the subarray is the max
-        currLargest = a[n-k+1];
-        foundAt = n-k+1;
-        for(int i = n-k+2; i <= n; i++){ // find the new max (NEEDS WORK)
-          if(a[i] > currLargest){
-            currLargest = a[i];
-            foundAt = i;
-          }
-        }
+        nextLargest.resetContent();
+      } else {
+        nextLargest.insert(a[n]);
+      }
+      if(n >= k && a[n-k] == currLargest){ // if the one we are losing from the subarray is the max
+        currLargest = nextLargest.popLargest();
       }
       if(n >= k - 1) {
         System.out.println(currLargest);
+        ans[ansInd] = currLargest;
+        ansInd++;
       }
     }
+    return ans;
   }
 }
