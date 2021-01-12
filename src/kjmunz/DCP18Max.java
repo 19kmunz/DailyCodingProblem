@@ -1,6 +1,7 @@
 package kjmunz;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /*
 Good morning! Here's your coding interview problem for today.
@@ -54,5 +55,34 @@ public class DCP18Max {
       }
     }
     return ans;
+  }
+
+  public static ArrayList<Integer> maxInKSubsAnswer(ArrayList<Integer> nums, int k) {
+    if (k <= 0) { return new ArrayList<>(); }
+
+    ArrayList<Integer> result = new ArrayList<>();
+    ArrayList<Integer> deque = new ArrayList<>(); // deque stores the index of numbers
+
+    for (int i = 0; i < nums.size(); i++) {
+      // checks if the deque is not empty and removes the number that is outside the deque
+      // for example: [5, 4, 3, 1] k = 3, when i is 3.
+      // Deque is [5, 4, 3] before. Remove 5 because out of window
+      // Makes deque always of size k
+      if (!deque.isEmpty() && deque.get(0) < i - k + 1) {
+        deque.remove(0);
+      }
+
+      // checks if the deque is not empty and pops from the deque smaller or equal numbers
+      // deque[deque.length - 1] is the last index
+      while (!deque.isEmpty() && nums.get(i) >= nums.get(deque.get(deque.size() - 1))) {
+        deque.remove(deque.size() - 1);
+      }
+
+      deque.add(i);
+      if (i >= k - 1) {
+        result.add(nums.get(deque.get(0)));
+      }
+    }
+    return result;
   }
 }
