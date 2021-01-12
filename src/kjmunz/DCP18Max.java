@@ -18,7 +18,7 @@ For example, given array = [10, 5, 2, 7, 8, 7] and k = 3, we should get: [10, 7,
 Do this in O(n) time and O(k) space. You can modify the input array in-place and you do not need to store the results. You can simply print them out as you compute them.
  */
 public class DCP18Max {
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     int[] a = {10, 5, 2, 7, 8, 7};
     int k = 3;
     maxInKSubs(a, k);
@@ -30,26 +30,32 @@ public class DCP18Max {
         System.out.println(value);
       }
     }
-    int c = 0;
     int currLargest = a[0];
-    for(int n = 2; n < a.length; n++){
+    int foundAt = 0;
+    for(int n = 1; n < a.length; n++){
       // for the first sub array, need to set up curr largest
-      if(c < k-1){
-        c++;
+      if(n < k){
         if(a[n] > currLargest){
           currLargest = a[n];
+          foundAt = n;
+        }
+        if(n == k-1){
+          System.out.println(currLargest);
         }
       } else {
         // now we have a constant currLargest
-        if(a[n-k] == currLargest){ // if the one we are losing from the subarray is the max
-          currLargest = a[n-k];
-          for(int i = n-k+1; i <= n; i++){ // find the new max (NEEDS WORK)
+        if(a[n] > currLargest){
+          currLargest = a[n];
+          foundAt = n;
+        } else if(n-k == foundAt){ // if the one we are losing from the subarray is the max
+          currLargest = a[n-k+1];
+          foundAt = n-k+1;
+          for(int i = n-k+2; i <= n; i++){ // find the new max (NEEDS WORK)
             if(a[i] > currLargest){
               currLargest = a[i];
+              foundAt = i;
             }
           }
-        } else if(a[n] > currLargest){
-          currLargest = a[n];
         }
         System.out.println(currLargest);
       }
